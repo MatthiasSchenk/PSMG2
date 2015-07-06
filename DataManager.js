@@ -7,6 +7,7 @@ var dataArr = [];
 var loadingCounter = 0;
 
 var traffic = [];
+var trafficOverall = [];
 var trafficDay = [];
 var trafficWeek = [];
 var trafficMonth = [];
@@ -16,6 +17,10 @@ var trafficMonth = [];
 
 exports.getTraffic = function(){
 	return traffic;
+};
+
+exports.getTrafficOverall = function(){
+	return trafficOverall;
 };
 
 exports.getTrafficDay = function(){
@@ -33,7 +38,7 @@ console.log("loading Data...");
 
 //Variables
 
-var NUM_DATA_FILES = 6;
+var NUM_DATA_FILES = 2;
 var dataNum = 0;
 var fileNames = [];
 var loadedFiles = [];
@@ -134,12 +139,46 @@ var parseJsonObj = function(obj){
 	return result;
 };
 
-var trafficData = function(){
+var filterTrafficData = function(){
 		filterLogins();
+		createOverallLogins();
 		filterDay();
 		filterWeek();
 
 	};
+
+var createOverallLogins = function(){
+	var tempDay = traffic[0].getDay();
+	var counter = 1;
+	for (var i = 0; i < traffic.length; i++) {
+		if (traffic[i].getDay() == tempDay) {
+			counter++;	
+		}else{
+			trafficOverall.push(
+				{date: traffic[i-1], logins: counter}
+				);
+			counter = 1;
+			tempDay = traffic[i].getDay();
+		}
+	};
+
+
+	var tempArr = [];
+	var tempArr2 = [];
+	var hash;
+	for (var i = 0; i < trafficOverall.length; i++) {
+		hash = ""+trafficOverall[i].date.getDate()+"."+ trafficOverall[i].date.getMonth();
+		if(tempArr2.indexOf(hash) == -1){
+			tempArr.push({day: trafficOverall[i].date.getDate() +"."+ trafficOverall[i].date.getMonth() +"."+trafficOverall[i].date.getFullYear(), logins: trafficOverall[i].logins});
+			tempArr2.push(hash);
+			
+		}else{
+			tempArr[tempArr2.indexOf(hash)].logins += trafficOverall[i].logins;
+		}	
+	};
+
+	trafficOverall = tempArr;
+}
 
 
 
@@ -299,7 +338,7 @@ var organizeData = function(){
 	
 	buildSingleArray();
 	convertTimeStamps();
-	trafficData();
+	filterTrafficData();
 	//loadAdditionalURLInfo();
 
 

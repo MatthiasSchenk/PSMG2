@@ -26,7 +26,7 @@ exports.dataComplete = function(dataIsComplete){
 	console.log("LOADING DONE");
 
 	server.use(cors());
-	
+
 	server.listen(PORT, function () {
   	console.log("server started on port "+ PORT + "...");
 
@@ -44,14 +44,20 @@ exports.setupServer = function() {
 		getTraffic = function(selector){
 
 		switch(selector) {
+            case "overall":
+                var trafficOverall = dataManager.getTrafficOverall();
+                return trafficOverall;
+            break
 	   		case "day":
 	   			var trafficDay = dataManager.getTrafficDay();
 				return trafficDay;
-	        break;
+	        break
 	        case "week":
 	   			var trafficWeek = dataManager.getTrafficWeek();
 				return trafficWeek;
 	        break;
+
+            
 			}	
 		};
 
@@ -67,6 +73,19 @@ exports.setupServer = function() {
      		}else{
             	response.send(getData);
             };            
+        });
+
+        server.get("/get/trafficOverall", function (request, response) {
+            console.log("TRAFFIC OVERALL REQUESTED");
+
+            response.header("Access-Control-Allow-Origin", "*");
+            response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
+            if(!dataLoaded){
+                response.send("Data still Loading, please wait...");
+            }else{
+                response.send(getTraffic("overall"));
+            };      
         });
 
      	server.get("/get/trafficDay", function (request, response) {
