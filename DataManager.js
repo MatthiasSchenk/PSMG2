@@ -38,7 +38,7 @@ console.log("loading Data...");
 
 //Variables
 
-var NUM_DATA_FILES = 2;
+var NUM_DATA_FILES = 6;
 var dataNum = 0;
 var fileNames = [];
 var loadedFiles = [];
@@ -169,7 +169,7 @@ var createOverallLogins = function(){
 	for (var i = 0; i < trafficOverall.length; i++) {
 		hash = ""+trafficOverall[i].date.getDate()+"."+ trafficOverall[i].date.getMonth();
 		if(tempArr2.indexOf(hash) == -1){
-			tempArr.push({day: trafficOverall[i].date.getDate() +"."+ trafficOverall[i].date.getMonth() +"."+trafficOverall[i].date.getFullYear(), logins: trafficOverall[i].logins});
+			tempArr.push({day: getWeekDay(trafficOverall[i].date.getDay())+" "+ trafficOverall[i].date.getDate() +"."+ trafficOverall[i].date.getMonth() +"."+trafficOverall[i].date.getFullYear(), logins: trafficOverall[i].logins});
 			tempArr2.push(hash);
 			
 		}else{
@@ -196,13 +196,43 @@ var filterWeek = function(){
 		counter = 0;
 	};
 
-trafficWeek[0].wDay = "Sonntag";
-trafficWeek[1].wDay = "Montag";
-trafficWeek[2].wDay = "Dienstag";
-trafficWeek[3].wDay = "Mittwoch";
-trafficWeek[4].wDay = "Donnerstag";
-trafficWeek[5].wDay = "Freitag";
-trafficWeek[6].wDay = "Samstag";
+trafficWeek[0].wDay = getWeekDay(0);
+trafficWeek[1].wDay = getWeekDay(1);
+trafficWeek[2].wDay = getWeekDay(2);
+trafficWeek[3].wDay = getWeekDay(3);
+trafficWeek[4].wDay = getWeekDay(4);
+trafficWeek[5].wDay = getWeekDay(5);
+trafficWeek[6].wDay = getWeekDay(6);
+
+};
+
+var getWeekDay = function(integ){
+	switch (integ){
+	case 0:
+   		return "Sonntag";
+    break
+	case 1:
+   		return "Montag";
+    break
+	case 2:
+   		return "Dienstag";
+    break
+	case 3:
+   		return "Mittwoch";
+    break
+	case 4:
+   		return "Donnerstag";
+    break
+	case 5:
+   		return "Freitag";
+    break
+	case 6:
+   		return "Samstag";
+    break;
+	}
+
+
+
 
 };
 
