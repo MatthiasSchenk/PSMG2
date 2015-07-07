@@ -6,12 +6,12 @@ App.DataManager = function(){
 
 	var trafficDay, trafficWeek, trafficOverall;
 	
-	var loadTraffic = function(selector, notify){
+	var loadData = function(selector, notify){
 		console.log("LOADING");
 
 		switch(selector) {
 		case "overall":
-			$.getJSON( "http://localhost:8080/get/trafficOverall", function( data ) {
+			$.getJSON( "http://localhost:8080/get/DataOverall", function( data ) {
   			trafficOverall = data;
   			notify();
 			});
@@ -36,7 +36,7 @@ App.DataManager = function(){
 
 
 
-	var getTrafficData = function(selector){
+	var getData = function(selector){
 		switch(selector) {
 
 		case "overall":
@@ -68,7 +68,7 @@ App.DataManager = function(){
 
 
 	return {
-        loadTraffic: loadTraffic,
-        getTrafficData: getTrafficData
+        loadData: loadData,
+        getData: getData
     };
 };

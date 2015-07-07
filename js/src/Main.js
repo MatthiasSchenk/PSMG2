@@ -16,63 +16,72 @@ App.Main = (function () {
 
 
 
-        var loadTrafficData = function(selector, callback){
-        	dataManager.loadTraffic(selector, function(){
+
+
+        var loadData = function(selector, callback){
+
+        	dataManager.loadData(selector, function(){
+
             switch(selector) {
             case "overall":
-                dataOverall = dataManager.getTrafficData("overall");
+                dataOverall = dataManager.getData("overall");
                 callback();
             break
             case "day":
-                dataDay = dataManager.getTrafficData("day");
+                dataDay = dataManager.getData("day");
                 callback();
             break
             case "week":
-                dataWeek = dataManager.getTrafficData("week");
+                dataWeek = dataManager.getData("week");
                 callback();
             break;
             }
-        	});
-        	
+        	});	
         };
 
-        $( "#traffic-button" ).addClass( "active" );
-        $( "#data-title" ).text('Gesamtzeitraum');
-        loadTrafficData("overall", function(){
-        visualisation.showTraffic("overall", dataOverall);
-        });
+        var onStart = function(){
+            $( "#traffic-button" ).addClass( "active" );
+            $( "#data-title" ).text('Gesamtzeitraum 21.1 - 21.3');
+            loadData("overall", function(){
+            visualisation.show("overall", dataOverall);
+            });
+        };
+
+
 
 
         $( "#traffic-button" ).click(function() {
  		 	$( "#traffic-button" ).addClass( "active" );
-            $( "#data-title" ).text('Gesamtzeitraum');
-            loadTrafficData("overall", function(){
-            visualisation.showTraffic("overall", dataOverall);
+            $( "#data-title" ).text('Gesamtzeitraum 21.1 - 21.3');
+            loadData("overall", function(){
+            visualisation.show("overall", dataOverall);
             });
 		});
 
         $( "#gesamt" ).click(function() {
             $( "#data-title" ).text('Gesamtzeitraum');
-            loadTrafficData("overall", function(){
-            visualisation.showTraffic("overall", dataOverall);
+            loadData("overall", function(){
+            visualisation.show("overall", dataOverall);
             });
         });
 
 
         $( "#tagesdurchschnitt" ).click(function() {
         $( "#data-title" ).text('Tagesdurchschnitt');
-            loadTrafficData("day", function(){
-            visualisation.showTraffic("day", dataDay);
+            loadData("day", function(){
+            visualisation.show("day", dataDay);
             });
         });
 
 
         $( "#wochendurchschnitt" ).click(function() {
             $( "#data-title" ).text('Wochendurchschnitt');
-            loadTrafficData("week", function(){
-            visualisation.showTraffic("week", dataWeek);
+            loadData("week", function(){
+            visualisation.show("week", dataWeek);
             });
         });
+
+        onStart();
 
 
 

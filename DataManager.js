@@ -7,7 +7,9 @@ var dataArr = [];
 var loadingCounter = 0;
 
 var traffic = [];
-var trafficOverall = [];
+
+var overallData = [];
+
 var trafficDay = [];
 var trafficWeek = [];
 var trafficMonth = [];
@@ -19,9 +21,14 @@ exports.getTraffic = function(){
 	return traffic;
 };
 
-exports.getTrafficOverall = function(){
-	return trafficOverall;
+// ---------------------------------------------
+
+exports.getOverallData = function(){
+	return overallData;
 };
+
+// ---------------------------------------------
+
 
 exports.getTrafficDay = function(){
 	return trafficDay;
@@ -140,25 +147,42 @@ var parseJsonObj = function(obj){
 };
 
 var filterTrafficData = function(){
+
+		createOverallData();
+
 		filterLogins();
-		createOverallLogins();
 		filterDay();
 		filterWeek();
 
 	};
 
-var createOverallLogins = function(){
-	var tempDay = traffic[0].getDay();
+
+var createOverallData = function(){
+	var tempDay = organizedData[0].Datum.getDay();
 	var counter = 1;
-	for (var i = 0; i < traffic.length; i++) {
-		if (traffic[i].getDay() == tempDay) {
+	var loginCounter = 0;
+	var submissionCounter = 0;
+	for (var i = 0; i < organizedData.length; i++) {
+		if (organizedData[i].Datum.getDay() == tempDay) {
 			counter++;	
+			if(organizedData[i].Aktion == "login"){
+				loginCounter++;
+			};
+			if (organizedData[i].Aktion == "submit for grading") {
+				submissionCounter++;
+			};	
+
 		}else{
-			trafficOverall.push(
-				{date: traffic[i-1], logins: counter}
+			overallData.push({
+				date: organizedData[i-1].Datum,
+				activity: counter,
+				logins: loginCounter,
+				submissions: submissionCounter}
 				);
 			counter = 1;
-			tempDay = traffic[i].getDay();
+			loginCounter = 0;
+			submissionCounter = 0;
+			tempDay = organizedData[i].Datum.getDay();
 		}
 	};
 
@@ -166,19 +190,34 @@ var createOverallLogins = function(){
 	var tempArr = [];
 	var tempArr2 = [];
 	var hash;
-	for (var i = 0; i < trafficOverall.length; i++) {
-		hash = ""+trafficOverall[i].date.getDate()+"."+ trafficOverall[i].date.getMonth();
+	for (var i = 0; i < overallData.length; i++) {
+		hash = ""+overallData[i].date.getDate()+"."+ overallData[i].date.getMonth();
 		if(tempArr2.indexOf(hash) == -1){
-			tempArr.push({day: getWeekDay(trafficOverall[i].date.getDay())+" "+ trafficOverall[i].date.getDate() +"."+ trafficOverall[i].date.getMonth() +"."+trafficOverall[i].date.getFullYear(), logins: trafficOverall[i].logins});
+			tempArr.push({
+				date: getWeekDay(overallData[i].date.getDay())+", "+ overallData[i].date.getDate() +"."+ overallData[i].date.getMonth(),
+				activity: overallData[i].activity,
+				logins: overallData[i].logins,
+				submissions: overallData[i].submissions
+			});
 			tempArr2.push(hash);
 			
 		}else{
-			tempArr[tempArr2.indexOf(hash)].logins += trafficOverall[i].logins;
+			tempArr[tempArr2.indexOf(hash)].activity += overallData[i].activity;
+			tempArr[tempArr2.indexOf(hash)].logins += overallData[i].logins;
+			tempArr[tempArr2.indexOf(hash)].submissions += overallData[i].submissions;
 		}	
 	};
 
-	trafficOverall = tempArr;
-}
+	tempArr.pop();
+	tempArr.pop();
+	overallData = tempArr;
+/*
+	for (var i = 0; i < overallData.length; i++) {
+		console.log(overallData[i].date+": "+ overallData[i].activity +", "+ overallData[i].logins+", "+ overallData[i].submissions);
+	};
+*/
+};
+
 
 
 
@@ -209,25 +248,25 @@ trafficWeek[6].wDay = getWeekDay(6);
 var getWeekDay = function(integ){
 	switch (integ){
 	case 0:
-   		return "Sonntag";
+   		return "So";
     break
 	case 1:
-   		return "Montag";
+   		return "Mo";
     break
 	case 2:
-   		return "Dienstag";
+   		return "Di";
     break
 	case 3:
-   		return "Mittwoch";
+   		return "Mi";
     break
 	case 4:
-   		return "Donnerstag";
+   		return "Do";
     break
 	case 5:
-   		return "Freitag";
+   		return "Fr";
     break
 	case 6:
-   		return "Samstag";
+   		return "Sa";
     break;
 	}
 

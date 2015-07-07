@@ -48,10 +48,20 @@ height: 100%;
 }
 
 #data-title{
+	width: 300px;
 }
 
 #checkboxes{
 	float: left;
 	width: 30%;
 	margin: 6px 0px 0px 0px;
+	display: none;
+}
+
+#chart_div{
+
+}
+
+#filter_div{
+
 }

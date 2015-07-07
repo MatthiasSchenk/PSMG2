@@ -45,8 +45,8 @@ exports.setupServer = function() {
 
 		switch(selector) {
             case "overall":
-                var trafficOverall = dataManager.getTrafficOverall();
-                return trafficOverall;
+                var overallData = dataManager.getOverallData();
+                return overallData;
             break
 	   		case "day":
 	   			var trafficDay = dataManager.getTrafficDay();
@@ -75,8 +75,8 @@ exports.setupServer = function() {
             };            
         });
 
-        server.get("/get/trafficOverall", function (request, response) {
-            console.log("TRAFFIC OVERALL REQUESTED");
+        server.get("/get/DataOverall", function (request, response) {
+            console.log("OVERALL DATA REQUESTED");
 
             response.header("Access-Control-Allow-Origin", "*");
             response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
